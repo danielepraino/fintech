@@ -1,0 +1,26 @@
+/* You can add global styles to this file, and also import other style files */
+
+$primary-blue: #3f51b5;
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.container {
+  width: 80%;
+  margin: 1rem auto;
+}
+
+.login-container {
+  width: 30%;
+  margin: 1rem auto;
+}
+
+.w-full {
+  width: 100%;
+}
+
+.a-link {
+  color: $primary-blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
