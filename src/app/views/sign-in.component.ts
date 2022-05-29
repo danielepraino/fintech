@@ -16,7 +16,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             email
             required
           >
-          <mat-icon matPrefix class="my-icon">person</mat-icon>
+          <mat-icon matPrefix>person</mat-icon>
           <mat-error *ngIf="emailRef.errors?.['email']">
                 Non è un formato email valido
           </mat-error>
@@ -38,7 +38,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             required
           >
           <mat-hint align="end">{{passwordRef.value?.length}} / 20</mat-hint>
-          <mat-icon matPrefix class="my-icon">lock</mat-icon>
+          <mat-icon matPrefix>lock</mat-icon>
           <mat-icon matSuffix (click)="showPasswordSignin = !showPasswordSignin">{{ showPasswordSignin ? "visibility" : "visibility_off" }}</mat-icon>
           <mat-error *ngIf="passwordRef.errors?.['minlength']">
                 La password deve essere di minimo {{passwordRef.errors?.['minlength'].requiredLength}} caratteri
