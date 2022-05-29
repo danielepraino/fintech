@@ -129,10 +129,10 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
           La password è obbligatioria
         </mat-error>
       </mat-form-field>
-      <button type="submit" class="w-full" mat-raised-button color="primary">
+      <button class="w-full !my-4" type="button" mat-raised-button color="primary">
         Registrati
       </button>
-      <a class="a-link" (click)="show.emit(true)">Hai già un account? Accedi</a>
+      <a class="underline cursor-pointer" (click)="show.emit(true)">Hai già un account? Accedi</a>
     </form>
   `,
   styles: [],

@@ -47,8 +47,8 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
                 La password è obbligatoria
           </mat-error>
         </mat-form-field>
-        <button type="submit" class="w-full" mat-raised-button color="primary">Accedi</button>
-        <a class="a-link" (click)="show.emit(false)">Crea un nuovo account</a>
+        <button class="w-full !my-4" type="button" mat-raised-button color="primary">Accedi</button>
+        <a class="underline cursor-pointer" (click)="show.emit(false)">Crea un nuovo account</a>
     </form>
   `,
   styles: [

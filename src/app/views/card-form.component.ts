@@ -1,20 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { CardForm } from './../models/card-form';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'ac-card-form',
   template: `
-  <mat-card class="login-container">
+  <mat-card class="w-full">
     <form #f="ngForm">
-      <!-- <mat-form-field class="w-full" appearance="fill">
-        <mat-label>Favorite food</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let food of foods" [value]="food.value">
-            {{food.viewValue}}
+      <mat-form-field class="w-full" appearance="fill">
+        <mat-label>Tipo di carta</mat-label>
+        <mat-select name="type" ngModel #cardTypeRef="ngModel" required>
+          <mat-option *ngFor="let cardType of cardTypes" [value]="cardType.type.toLowerCase()">
+            {{cardType.type}}
           </mat-option>
         </mat-select>
-      </mat-form-field> -->
-      <div class="d-flex justify-content-between">
-        <mat-form-field class="w-50" appearance="fill">
+        <mat-error *ngIf="cardTypeRef.errors?.['required']">
+            Il tipo di carta è obbligatorio
+        </mat-error>
+      </mat-form-field>
+      <div class="flex flex-wrap justify-between">
+        <mat-form-field class="w-full lg:w-1/2 lg:pr-1" appearance="fill">
           <mat-label>Nome</mat-label>
           <input
             type="text"
@@ -34,7 +39,7 @@ import { Component, OnInit } from '@angular/core';
             Il nome è obbligatorio
           </mat-error>
         </mat-form-field>
-        <mat-form-field class="w-50" appearance="fill">
+        <mat-form-field class="w-full lg:w-1/2 lg:pl-1" appearance="fill">
           <mat-label>Cognome</mat-label>
           <input
             type="text"
@@ -61,18 +66,26 @@ import { Component, OnInit } from '@angular/core';
             type="text"
             matInput
             ngModel
-            name="surname"
-            placeholder="Inserisci il tuo cognome"
-            #surnameRef="ngModel"
+            name="cardCode"
+            placeholder="Inserisci le cifre della tua carta"
+            #cardCodeRef="ngModel"
             required
-            pattern="^[A-Za-z]+$"
-            maxlength="40"
+            pattern="^[0-9]*$"
+            minlength="16"
+            maxlength="16"
           />
-          <mat-error *ngIf="surnameRef.errors?.['pattern']">
-            Il cognome deve essere composto da sole lettere
+          <mat-hint align="end"
+          >{{ cardCodeRef.value?.length }} / 16</mat-hint>
+          <mat-icon matPrefix>credit_card</mat-icon>
+          <mat-error *ngIf="cardCodeRef.errors?.['minlength']">
+          Il numero carta deve essere lungo
+          {{cardCodeRef.errors?.['minlength'].requiredLength}} cifre
+        </mat-error>
+          <mat-error *ngIf="cardCodeRef.errors?.['pattern']">
+            Il numero carta deve essere composto da soli numeri
           </mat-error>
-          <mat-error *ngIf="surnameRef.errors?.['required']">
-            Il cognome è obbligatorio
+          <mat-error *ngIf="cardCodeRef.errors?.['required']">
+            Il numero carta è obbligatorio
           </mat-error>
         </mat-form-field>
       <mat-form-field class="w-full" appearance="fill">
@@ -82,8 +95,9 @@ import { Component, OnInit } from '@angular/core';
           ngModel
           [type]="showSecureCode ? 'text' : 'password'"
           name="secureCode"
-          placeholder="Inserisci la tua password"
+          placeholder="Inserisci le 3 cifre del codice di sicurezza"
           #secureCodeRef="ngModel"
+          pattern="^[0-9]*$"
           minlength="3"
           maxlength="3"
           required
@@ -100,18 +114,18 @@ import { Component, OnInit } from '@angular/core';
           }}</mat-icon
         >
         <mat-error *ngIf="secureCodeRef.errors?.['minlength']">
-          La password deve essere di minimo
-          {{secureCodeRef.errors?.['minlength'].requiredLength}} caratteri
+          Il codice di sicurezza deve essere lunga
+          {{secureCodeRef.errors?.['minlength'].requiredLength}} cifre
         </mat-error>
         <mat-error *ngIf="secureCodeRef.errors?.['required']">
-          La password è obbligatioria
+        Il codice di sicurezza è obbligatorio
         </mat-error>
       </mat-form-field>
-      <button type="submit" class="w-full" mat-raised-button color="primary">
+      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" (click)="cardSubmitHandler.emit(f)">
         Aggiungi carta
       </button>
-      <button class="w-full" mat-stroked-button color="warn">Annulla</button>
     </form>
+    <button class="w-full !mt-4" mat-stroked-button color="warn" (click)="closeAddCard.emit(true)">Annulla</button>
   </mat-card>
   `,
   styles: [
@@ -119,11 +133,18 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CardFormComponent implements OnInit {
 
-  showSecureCode: boolean = true;
+  showSecureCode: boolean = false;
+  cardTypes = [
+    {type: 'Visa'},
+    {type: 'Mastercard'},
+  ]
 
   constructor() { }
 
   ngOnInit(): void {
   }
+
+  @Output() cardSubmitHandler = new EventEmitter<NgForm>();
+  @Output() closeAddCard = new EventEmitter<any>();
 
 }
