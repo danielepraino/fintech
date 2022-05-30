@@ -4,7 +4,8 @@ import { Component } from '@angular/core';
   selector: 'ac-root',
   template: `
     <!--<ac-login></ac-login>-->
-    <ac-cards></ac-cards>
+    <!--<ac-cards></ac-cards>-->
+    <ac-movements></ac-movements>
     <router-outlet></router-outlet>
   `,
   styles: []
