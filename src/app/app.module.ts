@@ -1,3 +1,4 @@
+import { FilterPipe } from './pipes/filter.pipe';
 import { TruncatePipe } from './pipes/truncate.pipe';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
@@ -15,6 +16,10 @@ import { CardFormComponent } from './views/card-form.component';
 import { CardsComponent } from './views/cards.component';
 import { MovementComponent } from './views/movement.component';
 import { MovementsComponent } from './views/movements.component';
+import { TransferComponent } from './views/transfer.component';
+import { ContactsComponent } from './views/contacts.component';
+import { ContactListComponent } from './views/contact-list.component';
+import { ContactFormComponent } from './views/contact-form.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +32,12 @@ import { MovementsComponent } from './views/movements.component';
     CardsComponent,
     MovementComponent,
     MovementsComponent,
+    TransferComponent,
+    ContactsComponent,
+    ContactListComponent,
+    ContactFormComponent,
     TruncatePipe,
+    FilterPipe
   ],
   imports: [
     BrowserModule,

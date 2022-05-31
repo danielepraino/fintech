@@ -1,5 +1,5 @@
-import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 import { Card } from './../models/card';
+import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({
   selector: 'ac-card-list',
@@ -18,7 +18,7 @@ import { Card } from './../models/card';
           <mat-icon
             matSuffix
             matTooltip="Vedi movimenti"
-            matTooltipPosition="left"
+            matTooltipPosition="below"
             (click) = "cardMovements.emit(card.id)"
           >
             receipt_long
@@ -26,7 +26,7 @@ import { Card } from './../models/card';
           <mat-icon
             matSuffix
             matTooltip="Rimuovi"
-            matTooltipPosition="right"
+            matTooltipPosition="below"
             (click) = "removeCard.emit(card.id)"
           >
             delete

@@ -1,5 +1,4 @@
 import { NgForm } from '@angular/forms';
-import { CardForm } from './../models/card-form';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({

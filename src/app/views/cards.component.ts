@@ -1,6 +1,6 @@
 import { Card } from './../models/card';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'ac-cards',

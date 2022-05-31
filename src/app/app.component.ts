@@ -5,7 +5,8 @@ import { Component } from '@angular/core';
   template: `
     <!--<ac-login></ac-login>-->
     <!--<ac-cards></ac-cards>-->
-    <ac-movements></ac-movements>
+     <!--<ac-movements></ac-movements>-->
+    <ac-transfer></ac-transfer>
     <router-outlet></router-outlet>
   `,
   styles: []
