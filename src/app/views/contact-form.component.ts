@@ -1,18 +1,18 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
 import { Contact } from '../models/contact';
+import { NgForm } from '@angular/forms';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'ac-contact-form',
   template: `
-    <button class="w-full !mb-4" mat-stroked-button (click)="closeContactsDialog()">Indietro</button>
     <form #f="ngForm">
       <mat-form-field class="w-full" appearance="fill">
         <mat-label>Nome</mat-label>
         <input
           type="text"
           matInput
-          ngModel
+          [ngModel]="editSelectedContact[0].name"
           name="name"
           placeholder="Inserisci il tuo nome"
           #nameRef="ngModel"
@@ -32,7 +32,7 @@ import { Contact } from '../models/contact';
         <input
           type="text"
           matInput
-          ngModel
+          [ngModel]="editSelectedContact[0].surname"
           name="surname"
           placeholder="Inserisci il tuo cognome"
           #surnameRef="ngModel"
@@ -52,7 +52,7 @@ import { Contact } from '../models/contact';
           <input
             type="text"
             matInput
-            ngModel
+            [ngModel]="editSelectedContact[0].iban"
             name="iban"
             placeholder="Inserisci l'IBAN del destinatario"
             #ibanRef="ngModel"
@@ -75,7 +75,7 @@ import { Contact } from '../models/contact';
           Il codice IBAN è obbligatorio
           </mat-error>
         </mat-form-field>
-      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid" (click)="saveNewContact.emit()">
+      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid" (click)="saveNewContact.emit(f)">
         Salva
       </button>
     </form>
@@ -88,12 +88,10 @@ export class ContactFormComponent implements OnInit {
   constructor(public dialog: MatDialog) { }
 
   ngOnInit(): void {
+    console.log("selectedContact", this.editSelectedContact);
   }
 
-  closeContactsDialog() {
-    this.dialog.closeAll();
-  }
-
-  @Output() saveNewContact = new EventEmitter<Contact>();
+  @Input() editSelectedContact: Contact[] = [];
+  @Output() saveNewContact = new EventEmitter<NgForm>();
 
 }

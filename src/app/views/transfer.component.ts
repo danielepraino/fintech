@@ -153,11 +153,4 @@ export class TransferComponent implements OnInit {
     });
   }
 
-  saveNewContact(form: NgForm) {
-    if (!form.invalid) {
-      console.log(form.value);
-      form.reset();
-    }
-  }
-
 }

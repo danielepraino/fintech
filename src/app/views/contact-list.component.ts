@@ -9,15 +9,15 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
       <input
         matInput
         placeholder="Cerca un contatto"
-        [(ngModel)]="clearableValue"
+        [(ngModel)]="searchContact"
       />
       <mat-icon matPrefix>search</mat-icon>
       <button
-        *ngIf="clearableValue"
+        *ngIf="searchContact"
         matSuffix
         mat-icon-button
         aria-label="Clear"
-        (click)="clearableValue = ''"
+        (click)="searchContact = ''"
       >
         <mat-icon>close</mat-icon>
       </button>
@@ -26,7 +26,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
       <h3 class="text-gray-500">Contatti</h3>
       <div
         class="flex justify-between items-center"
-        *ngFor="let contact of contacts | filter: clearableValue"
+        *ngFor="let contact of contacts | filter: searchContact"
       >
         <div class="flex items-center">
           <mat-icon class="text-gray-500 mr-4" matSuffix
@@ -52,7 +52,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
             matSuffix
             matTooltip="Modifica"
             matTooltipPosition="below"
-            (click)="editContact.emit(contact._id)"
+            (click)="editContact.emit(contact)"
           >
             edit
           </mat-icon>
@@ -71,7 +71,8 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
   styles: [],
 })
 export class ContactListComponent implements OnInit {
-  clearableValue = '';
+
+  searchContact = '';
 
   constructor() {}
 

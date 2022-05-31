@@ -1,23 +1,32 @@
+import { NgForm } from '@angular/forms';
 import { Contact } from '../models/contact';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'ac-contacts',
   template: `
     <mat-dialog-content>
-      <!--<ac-contact-list [contacts]="contacts" (selectContact)="selectContact($event)" (editContact)="editContact($event)" (removeContact)="removeContact($event)"></ac-contact-list>-->
-      <ac-contact-form></ac-contact-form>
+    <ng-container *ngIf="showContactList">
+      <ac-contact-list [contacts]="contacts" (selectContact)="selectContact($event)" (editContact)="editContact($event)" (removeContact)="removeContact($event)"></ac-contact-list>
+      <button class="w-full !mt-4" mat-raised-button color="primary" (click)="showContactList = false">Nuovo contatto</button>
+    </ng-container>
+    <ng-container *ngIf="!showContactList">
+      <button class="w-full !mb-4" mat-stroked-button (click)="showContactList = true">Indietro</button>
+      <ac-contact-form [editSelectedContact]="editSelectedContact" (saveNewContact)="saveNewContact($event)"></ac-contact-form>
+    </ng-container>
     </mat-dialog-content>
     <mat-dialog-actions>
-      <button class="w-full !mt-4" mat-raised-button color="primary">
-        Nuovo contatto
-      </button>
+
     </mat-dialog-actions>
   `,
   styles: [
   ]
 })
 export class ContactsComponent implements OnInit {
+
+  showContactList: boolean = true;
+
+  editSelectedContact: Contact[] = [];
 
   contacts: Contact[] = [
     {
@@ -39,16 +48,25 @@ export class ContactsComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  selectContact(event: any) {
-    console.log("selectContact", event);
+  selectContact(selectedContactId: any) {
+    console.log("selectContact", selectedContactId);
   }
 
-  editContact(event: any) {
-    console.log("editContact", event);
+  editContact(selectedContact: Contact) {
+    this.showContactList = false;
+    this.editSelectedContact = [];
+    return this.editSelectedContact = [...this.editSelectedContact, selectedContact];
   }
 
-  removeContact(event: any) {
-    console.log("removeContact", event);
+  removeContact(selectedContactId: any) {
+    this.contacts = this.contacts.filter(contact => contact._id != selectedContactId);
   }
 
+  saveNewContact(form: NgForm) {
+    if (!form.invalid) {
+      this.contacts = [...this.contacts, form.value];
+      console.log(form.value);
+      form.reset();
+    }
+  }
 }
