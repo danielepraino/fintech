@@ -5,20 +5,26 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'ac-cards',
   template: `
-  <mat-sidenav-container>
-    <mat-sidenav #sidenav mode="side" position="end">
-      <ac-card-form (cardSubmitHandler)="cardSubmitHandler($event)" (closeAddCard)="sidenav.close()"></ac-card-form>
-    </mat-sidenav>
-    <mat-sidenav-content class="min-h-screen">
-      <ac-card-list [cards]="cards" (cardMovements)="cardMovements($event)" (removeCard)="removeCard($event)" (addCard)="sidenav.toggle()"></ac-card-list>
-    </mat-sidenav-content>
-  </mat-sidenav-container>
+    <mat-sidenav-container>
+      <mat-sidenav #sidenav mode="side" position="end">
+        <ac-card-form
+          (cardSubmitHandler)="cardSubmitHandler($event)"
+          (closeAddCard)="sidenav.close()"
+        ></ac-card-form>
+      </mat-sidenav>
+      <mat-sidenav-content class="min-h-screen">
+        <ac-card-list
+          [cards]="cards"
+          (cardMovements)="cardMovements($event)"
+          (removeCard)="removeCard($event)"
+          (addCard)="sidenav.toggle()"
+        ></ac-card-list>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
   `,
-  styles: [
-  ]
+  styles: [],
 })
 export class CardsComponent implements OnInit {
-
   cards: Card[] = [
     {
       id: 'ac24141',
@@ -38,18 +44,17 @@ export class CardsComponent implements OnInit {
     },
   ];
 
-  constructor() { }
+  constructor() {}
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   cardMovements(event: any) {
-    console.log("cardMovements", event);
+    console.log('cardMovements', event);
   }
 
   removeCard(selectedCard: any) {
     console.log(selectedCard);
-    this.cards = this.cards.filter(card => card.id != selectedCard);
+    this.cards = this.cards.filter((card) => card.id != selectedCard);
   }
 
   cardSubmitHandler(form: NgForm) {
@@ -59,5 +64,4 @@ export class CardsComponent implements OnInit {
       form.reset();
     }
   }
-
 }

@@ -43,7 +43,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
             matSuffix
             matTooltip="Seleziona"
             matTooltipPosition="below"
-            (click)="selectContact.emit(contact._id)"
+            (click)="selectContact.emit(contact)"
           >
             done
           </mat-icon>

@@ -10,8 +10,8 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
         <div class="flex items-center my-1">
           <mat-icon matPrefix class="text-gray-400 mr-4">credit_card</mat-icon>
           <div>
-            <div>{{card.id}}</div>
-            <div>{{card.amount}} - {{card.type}}</div>
+            <div>{{ card.id }}</div>
+            <div>{{ card.amount }} - {{ card.type }}</div>
           </div>
         </div>
         <div>
@@ -19,7 +19,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             matSuffix
             matTooltip="Vedi movimenti"
             matTooltipPosition="below"
-            (click) = "cardMovements.emit(card.id)"
+            (click)="cardMovements.emit(card.id)"
           >
             receipt_long
           </mat-icon>
@@ -27,28 +27,30 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             matSuffix
             matTooltip="Rimuovi"
             matTooltipPosition="below"
-            (click) = "removeCard.emit(card.id)"
+            (click)="removeCard.emit(card.id)"
           >
             delete
           </mat-icon>
         </div>
       </div>
-      <button mat-raised-button class="w-full !mt-4" (click)="addCard.emit(true)">Aggiungi</button>
+      <button
+        mat-raised-button
+        class="w-full !mt-4"
+        (click)="addCard.emit(true)"
+      >
+        Aggiungi
+      </button>
     </mat-card>
   `,
-  styles: [
-  ]
+  styles: [],
 })
 export class CardListComponent implements OnInit {
+  constructor() {}
 
-  constructor() { }
-
-  ngOnInit(): void {
-  }
+  ngOnInit(): void {}
 
   @Input() cards: Card[] = [];
   @Output() cardMovements = new EventEmitter<any>();
   @Output() removeCard = new EventEmitter<any>();
   @Output() addCard = new EventEmitter<any>();
-
 }

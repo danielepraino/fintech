@@ -20,6 +20,9 @@ import { TransferComponent } from './views/transfer.component';
 import { ContactsComponent } from './views/contacts.component';
 import { ContactListComponent } from './views/contact-list.component';
 import { ContactFormComponent } from './views/contact-form.component';
+import { AppointmentListComponent } from './views/appointment-list.component';
+import { AppointmentDateComponent } from './views/appointment-date.component';
+import { AppointmentsComponent } from './views/appointments.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +40,10 @@ import { ContactFormComponent } from './views/contact-form.component';
     ContactListComponent,
     ContactFormComponent,
     TruncatePipe,
-    FilterPipe
+    FilterPipe,
+    AppointmentListComponent,
+    AppointmentDateComponent,
+    AppointmentsComponent
   ],
   imports: [
     BrowserModule,
