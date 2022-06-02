@@ -1,5 +1,5 @@
-import { Movement } from './../models/movement';
-import { Card } from './../models/card';
+import { Movement } from 'src/app/models/movement';
+import { Card } from 'src/app/models/card';
 import { Component, OnInit } from '@angular/core';
 
 @Component({

@@ -1,4 +1,4 @@
-import { Contact } from '../models/contact';
+import { Contact } from 'src/app/models/contact';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({

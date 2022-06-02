@@ -1,4 +1,4 @@
-import { Card } from './../models/card';
+import { Card } from '../../models/card';
 import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 

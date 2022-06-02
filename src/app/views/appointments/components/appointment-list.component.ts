@@ -1,4 +1,4 @@
-import { Location } from '../models/location';
+import { Location } from 'src/app/models/location';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({

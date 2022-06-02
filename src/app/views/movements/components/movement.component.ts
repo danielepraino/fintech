@@ -1,4 +1,4 @@
-import { Movement } from './../models/movement';
+import { Movement } from 'src/app/models/movement';
 import { Component, OnInit, Input } from '@angular/core';
 
 @Component({

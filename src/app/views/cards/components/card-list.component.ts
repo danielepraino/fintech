@@ -1,4 +1,4 @@
-import { Card } from './../models/card';
+import { Card } from 'src/app/models/card';
 import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
 
 @Component({

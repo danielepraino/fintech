@@ -1,6 +1,6 @@
+import { Contact } from 'src/app/models/contact';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
-import { Contact } from '../models/contact';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -41,6 +41,7 @@ import { Component, OnInit } from '@angular/core';
   styles: [],
 })
 export class ContactsComponent implements OnInit {
+
   showContactList: boolean = true;
 
   editSelectedContact: Contact[] = [];

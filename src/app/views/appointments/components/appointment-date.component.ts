@@ -1,8 +1,7 @@
-import { DayWithSlots } from '../models/day-with-slots';
+import { DayWithSlots } from 'src/app/models/day-with-slots';
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'ac-appointment-date',
