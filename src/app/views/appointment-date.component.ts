@@ -107,8 +107,8 @@ export class AppointmentDateComponent implements OnInit {
       {{msg}}
     </div>
     <div mat-dialog-actions align="end">
-      <button mat-button mat-dialog-close>Annulla</button>
-      <button mat-button cdkFocusInitial>Conferma</button>
+      <button mat-raised-button mat-dialog-close color="warn">Annulla</button>
+      <button mat-raised-button cdkFocusInitial color="primary">Conferma</button>
     </div>
   `,
 })

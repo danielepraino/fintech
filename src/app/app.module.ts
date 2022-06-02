@@ -23,9 +23,12 @@ import { ContactFormComponent } from './views/contact-form.component';
 import { AppointmentListComponent } from './views/appointment-list.component';
 import { AppointmentDateComponent } from './views/appointment-date.component';
 import { AppointmentsComponent } from './views/appointments.component';
+import { NavmenuComponent } from './views/navmenu.component';
 
 @NgModule({
   declarations: [
+    TruncatePipe,
+    FilterPipe,
     AppComponent,
     LoginComponent,
     SignInComponent,
@@ -39,11 +42,10 @@ import { AppointmentsComponent } from './views/appointments.component';
     ContactsComponent,
     ContactListComponent,
     ContactFormComponent,
-    TruncatePipe,
-    FilterPipe,
     AppointmentListComponent,
     AppointmentDateComponent,
-    AppointmentsComponent
+    AppointmentsComponent,
+    NavmenuComponent
   ],
   imports: [
     BrowserModule,
