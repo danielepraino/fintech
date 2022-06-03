@@ -1,3 +1,5 @@
+import { Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 
 @Component({
@@ -47,8 +49,8 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
                 La password è obbligatoria
           </mat-error>
         </mat-form-field>
-        <button class="w-full !my-4" type="button" mat-raised-button color="primary">Accedi</button>
-        <a class="underline cursor-pointer" (click)="show.emit(false)">Crea un nuovo account</a>
+        <button class="w-full !my-4" type="button" mat-raised-button color="primary" (click)="signinHandler(f)">Accedi</button>
+        <a class="underline cursor-pointer" (click)="show.emit(false)" routerLink="../register">Crea un nuovo account</a>
     </form>
   `,
   styles: [
@@ -58,12 +60,19 @@ export class SignInComponent implements OnInit {
 
   showPasswordSignin: boolean = false;
 
-  constructor() { }
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
   }
 
+  signinHandler(form: NgForm) {
+    if (!form.invalid) {
+      console.log(form.value);
+      form.reset();
+      this.router.navigateByUrl('dashboard');
+    }
+  }
+
   @Output() show = new EventEmitter<boolean>();
-  //@Output() submitHandler = new EventEmitter<any>();
 
 }

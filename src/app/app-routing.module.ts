@@ -2,12 +2,9 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
+  { path: 'login', loadChildren: () => import('./views/login/login.module').then(m => m.LoginModule) },
   { path: 'dashboard', loadChildren: () => import('./views/dashboard/dashboard.module').then(m => m.DashboardModule) },
-  { path: 'dashboard/cards', loadChildren: () => import('./views/cards/cards.module').then(m => m.CardsModule) },
-  { path: 'dashboard/movements', loadChildren: () => import('./views/movements/movements.module').then(m => m.MovementsModule) },
-  { path: 'dashboard/transfer', loadChildren: () => import('./views/transfer/transfer.module').then(m => m.TransferModule) },
-  { path: 'dashboard/appointments', loadChildren: () => import('./views/appointments/appointments.module').then(m => m.AppointmentsModule) },
-  //{ path: '**', redirectTo: 'dashboard' },
+  { path: '', redirectTo: 'login/signin', pathMatch: 'full' },
 ];
 
 @NgModule({

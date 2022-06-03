@@ -132,12 +132,13 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
       <button class="w-full !my-4" type="button" mat-raised-button color="primary">
         Registrati
       </button>
-      <a class="underline cursor-pointer" (click)="show.emit(true)">Hai già un account? Accedi</a>
+      <a class="underline cursor-pointer" (click)="show.emit(true)" routerLink="../signin">Hai già un account? Accedi</a>
     </form>
   `,
   styles: [],
 })
 export class RegisterComponent implements OnInit {
+
   showPasswordRegister: boolean = false;
   showPasswordRegisterRepeat: boolean = false;
 
