@@ -1,5 +1,5 @@
 export interface Card {
-  id: string;
+  _id: string;
   number: number;
   ownerId: string;
   owner: string;

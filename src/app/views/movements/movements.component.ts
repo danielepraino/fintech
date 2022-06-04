@@ -9,7 +9,7 @@ import { Component, OnInit } from '@angular/core';
       <mat-form-field appearance="fill">
         <mat-label>Seleziona una carta</mat-label>
         <mat-select name="cardNum" #cardNumRef (selectionChange)="movementsByCard($event)">
-          <mat-option *ngFor="let card of cards" [value]="card.id">
+          <mat-option *ngFor="let card of cards" [value]="card._id">
             {{card.number}}
           </mat-option>
         </mat-select>
@@ -197,7 +197,7 @@ export class MovementsComponent implements OnInit {
 
   cards: Card[] = [
     {
-      id: 'id123',
+      _id: 'id123',
       number: 1231231231231231,
       ownerId: 'idMario123',
       owner: 'Mario Rossi',
@@ -205,7 +205,7 @@ export class MovementsComponent implements OnInit {
       amount: 2500,
     },
     {
-      id: 'id456',
+      _id: 'id456',
       number: 4564564564564564,
       ownerId: 'idLuigi456',
       owner: 'Luigi Bianchi',

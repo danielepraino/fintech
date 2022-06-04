@@ -1,6 +1,10 @@
-import { Card } from '../../models/card';
+import { Card } from './../../models/card';
+import { CardsService } from './../../api/cards.service';
 import { NgForm } from '@angular/forms';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDrawer } from '@angular/material/sidenav';
+import { CardFormComponent } from './components/card-form.component';
 
 @Component({
   selector: 'ac-cards',
@@ -16,7 +20,7 @@ import { Component, OnInit } from '@angular/core';
         <ac-card-list
           [cards]="cards"
           (cardMovements)="cardMovements($event)"
-          (removeCard)="removeCard($event)"
+          (deleteCard)="deleteCard($event)"
           (addCard)="sidenav.toggle()"
         ></ac-card-list>
       </mat-sidenav-content>
@@ -25,43 +29,48 @@ import { Component, OnInit } from '@angular/core';
   styles: [],
 })
 export class CardsComponent implements OnInit {
-  cards: Card[] = [
-    {
-      id: 'ac24141',
-      number: 12345,
-      ownerId: '141414',
-      owner: 'Mario Rossi',
-      type: 'visa',
-      amount: 2000,
-    },
-    {
-      id: 'bg12412',
-      number: 678910,
-      ownerId: '090909',
-      owner: 'Luigi Bianchi',
-      type: 'mastercard',
-      amount: 500,
-    },
-  ];
 
-  constructor() {}
+  @ViewChild('sidenav') sidenavRef!:MatDrawer;
+  @ViewChild(CardFormComponent) cardFormRef!:CardFormComponent;
 
-  ngOnInit(): void {}
+  cards: Card[] = [];
 
-  cardMovements(event: any) {
-    console.log('cardMovements', event);
+  constructor(private cardsService: CardsService, private snackBar: MatSnackBar) {}
+
+  ngOnInit(): void {
+    this.cardsService.getCards().subscribe(res => {
+      this.cards = res;
+      console.log("CardsService.getCards()", res);
+    });
   }
 
-  removeCard(selectedCard: any) {
-    console.log(selectedCard);
-    this.cards = this.cards.filter((card) => card.id != selectedCard);
+  addCard(cardData: Card[]) {
+    this.cardsService.addCard(cardData).subscribe((res: any) => {
+        this.cards = [...this.cards, res];
+        this.snackBar.open('Carta aggiunta', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+        this.sidenavRef.close();
+    });
+  }
+
+  deleteCard(cardId: any) {
+    this.cardsService.deleteCard(cardId).subscribe((res: any) => {
+      if (res) {
+        this.cards = this.cards.filter((card) => card._id != cardId);
+        this.snackBar.open('Carta cancellata', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+      } else {
+        this.snackBar.open('Impossibile cancellare la carta', 'ERROR', { duration: 2500, panelClass: ['text-red-400'] });
+      }
+    });
+  }
+
+  cardMovements(cardId: any) {
+    console.log('cardMovements', cardId);
   }
 
   cardSubmitHandler(form: NgForm) {
     if (!form.invalid) {
-      this.cards = [...this.cards, form.value];
-      console.log(form.value);
-      form.reset();
+      this.addCard(form.value);
+      this.cardFormRef.cleanup();
     }
   }
 }

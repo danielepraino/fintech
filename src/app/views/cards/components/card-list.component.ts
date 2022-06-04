@@ -10,8 +10,8 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
         <div class="flex items-center my-1">
           <mat-icon matPrefix class="text-gray-400 mr-4">credit_card</mat-icon>
           <div>
-            <div>{{ card.id }}</div>
-            <div>{{ card.amount }} - {{ card.type }}</div>
+            <div>{{ card.owner }}</div>
+            <div><span class="font-medium">€{{ card.amount }}</span> - {{ card.type }}</div>
           </div>
         </div>
         <div>
@@ -19,7 +19,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             matSuffix
             matTooltip="Vedi movimenti"
             matTooltipPosition="below"
-            (click)="cardMovements.emit(card.id)"
+            (click)="cardMovements.emit(card._id)"
           >
             receipt_long
           </mat-icon>
@@ -27,7 +27,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             matSuffix
             matTooltip="Rimuovi"
             matTooltipPosition="below"
-            (click)="removeCard.emit(card.id)"
+            (click)="deleteCard.emit(card._id)"
           >
             delete
           </mat-icon>
@@ -51,6 +51,6 @@ export class CardListComponent implements OnInit {
 
   @Input() cards: Card[] = [];
   @Output() cardMovements = new EventEmitter<any>();
-  @Output() removeCard = new EventEmitter<any>();
+  @Output() deleteCard = new EventEmitter<any>();
   @Output() addCard = new EventEmitter<any>();
 }
