@@ -1,3 +1,4 @@
+import { Movement } from 'src/app/models/movement';
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
@@ -12,15 +13,19 @@ export class CardsService {
   constructor(private http: HttpClient) {}
 
   getCards(): Observable<Card[]> {
-    return this.http.get<Card[]>(environment.apiUrl + '/cards');
+    return this.http.get<Card[]>(`${environment.apiUrl}/cards`);
   }
 
   addCard(cardData: Card[]): Observable<Card[]> {
-    return this.http.post<Card[]>(environment.apiUrl + '/cards', cardData);
+    return this.http.post<Card[]>(`${environment.apiUrl}/cards`, cardData);
   }
 
   deleteCard(cardId: string): Observable<boolean> {
-    return this.http.delete<boolean>(environment.apiUrl + `/cards/${cardId}`);
+    return this.http.delete<boolean>(`${environment.apiUrl}/cards/${cardId}`);
+  }
+
+  getCardMovements(cardId: string, limit: number, offset: number): Observable<Movement[]> {
+    return this.http.get<Movement[]>(`${environment.apiUrl}/cards/${cardId}/movements`, { params: { limit, offset } });
   }
 
 

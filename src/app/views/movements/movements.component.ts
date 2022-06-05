@@ -1,6 +1,7 @@
-import { Movement } from 'src/app/models/movement';
+import { CardsService } from './../../api/cards.service';
 import { Card } from 'src/app/models/card';
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'ac-movements',
@@ -8,227 +9,78 @@ import { Component, OnInit } from '@angular/core';
     <div class="w-full">
       <mat-form-field appearance="fill">
         <mat-label>Seleziona una carta</mat-label>
-        <mat-select name="cardNum" #cardNumRef (selectionChange)="movementsByCard($event)">
+        <mat-select
+          name="cardNum"
+          #cardNumRef
+          (selectionChange)="selectedCardMovements($event)"
+        >
           <mat-option *ngFor="let card of cards" [value]="card._id">
-            {{card.number}}
+            {{ card.number }}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <h4>Saldo: €2000</h4>
-      <ac-movement [movements]="filteredMovements"></ac-movement>
-      <button *ngIf="loadMore < singleCardMovements.length" class="w-full" mat-stroked-button (click)="loadMore = loadMore + 5">Carica altro</button>
+      <div class="font-medium text-lg mb-4" *ngIf="selectedCard[0]">
+        <span class="bg-blue-200 p-2"
+          >Saldo: € {{ selectedCard[0].amount }}</span
+        >
+      </div>
+      <ac-movement [movements]="movements.data"></ac-movement>
+      <button
+        *ngIf="movementsIncrement <= movements.total"
+        class="w-full"
+        mat-stroked-button
+        (click)="loadMoreMovements(selectedCard, movementsLimit, movementsOffset, movementsIncrement)"
+      >
+        Carica altro
+      </button>
     </div>
   `,
-  styles: [
-  ]
+  styles: [],
 })
 export class MovementsComponent implements OnInit {
+  cards: Card[] = [];
+  selectedCard: Card[] = [];
+  movements: any = [];
+  urlParam: any = {};
 
-  movements: Movement[] = [
-    {  _id: 'id123',
-      type: 'out',
-      amount: 500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet',
-      cardId: 'id1234',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'in',
-      amount: 2500,
-      title: 'Movimento 1 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    },
-    {  _id: 'id456',
-      type: 'out',
-      amount: 1000,
-      title: 'Movimento 2 test test test',
-      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus fermentum magna a lacinia semper. Proin vulputate sagittis justo, iaculis porta justo consectetur nec. Vivamus malesuada sollicitudin neque a tristique. Aliquam a magna et velit commodo gravida. Duis in varius lorem. Mauris vel sem eu orci suscipit sollicitudin at gravida tortor. Phasellus consequat eget quam et congue.',
-      cardId: 'id5678',
-      timestamp: Date.now(),
-    }
-  ]
+  movementsLimit: number = 5;
+  movementsOffset: number = 0;
+  movementsIncrement: number = 0;
 
-  cards: Card[] = [
-    {
-      _id: 'id123',
-      number: 1231231231231231,
-      ownerId: 'idMario123',
-      owner: 'Mario Rossi',
-      type: 'visa',
-      amount: 2500,
-    },
-    {
-      _id: 'id456',
-      number: 4564564564564564,
-      ownerId: 'idLuigi456',
-      owner: 'Luigi Bianchi',
-      type: 'mastercard',
-      amount: 500,
-    },
-  ]
+  queryCard: Card[] = [];
 
-  constructor() { }
+  constructor(private cardsService: CardsService, private activatedRoute: ActivatedRoute, private router: Router) {}
 
   ngOnInit(): void {
+    this.cardsService.getCards().subscribe((res) => {
+      this.cards = res;
+      this.urlParam = { value: this.activatedRoute.snapshot.params['cardId'] }
+      if(this.urlParam.value != undefined) {
+        this.selectedCardMovements(this.urlParam);
+      }
+    });
   }
 
-  filteredMovements: Movement[] = [...this.movements];
-  singleCardMovements: Movement[] = [];
-  loadMore: number = 5;
+  selectedCardMovements(cardId: any) {
+    this.router.navigateByUrl(`dashboard/movements/${cardId.value}`);
+    this.movements = [];
+    this.movementsIncrement = 5;
+    this.selectedCard = this.cards.filter((card) => card._id == cardId.value);
+    this.cardMovements(this.selectedCard, this.movementsLimit, this.movementsOffset);
+  }
 
-  movementsByCard(cardId: any) {
-    if (this.loadMore >= this.singleCardMovements.length) {
-      this.loadMore = 5;
+  cardMovements(selectedCard: any, limit: number, offset: number) {
+    this.cardsService
+      .getCardMovements(selectedCard[0]._id, limit, offset)
+      .subscribe((res: any) => {
+        this.movements = res;
+      });
+  }
+
+  loadMoreMovements(selectedCard: any, limit: number, offset: number, increment: number) {
+    if (this.movementsIncrement <= this.movements.total) {
+      this.cardMovements(selectedCard, (limit += this.movementsIncrement), offset);
+      this.movementsIncrement += increment;
     }
-    this.filteredMovements = [...this.movements];
-    this.singleCardMovements = this.filteredMovements.filter(movement => movement._id == cardId.value);
-    return this.filteredMovements = this.filteredMovements.filter((movement, index) => movement._id == cardId.value && index < this.loadMore);
   }
 }

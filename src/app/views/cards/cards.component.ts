@@ -1,3 +1,4 @@
+import { Router } from '@angular/router';
 import { Card } from './../../models/card';
 import { CardsService } from './../../api/cards.service';
 import { NgForm } from '@angular/forms';
@@ -35,7 +36,7 @@ export class CardsComponent implements OnInit {
 
   cards: Card[] = [];
 
-  constructor(private cardsService: CardsService, private snackBar: MatSnackBar) {}
+  constructor(private cardsService: CardsService, private snackBar: MatSnackBar, private router: Router) {}
 
   ngOnInit(): void {
     this.cardsService.getCards().subscribe(res => {
@@ -64,7 +65,7 @@ export class CardsComponent implements OnInit {
   }
 
   cardMovements(cardId: any) {
-    console.log('cardMovements', cardId);
+    this.router.navigateByUrl(`dashboard/movements/${cardId}`);
   }
 
   cardSubmitHandler(form: NgForm) {
