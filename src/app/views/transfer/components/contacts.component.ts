@@ -1,3 +1,6 @@
+import { ContactFormComponent } from './contact-form.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ContactsService } from './../../../api/contacts.service';
 import { Contact } from 'src/app/models/contact';
 import { MatDialog } from '@angular/material/dialog';
 import { NgForm } from '@angular/forms';
@@ -10,15 +13,15 @@ import { Component, OnInit } from '@angular/core';
       <ng-container *ngIf="showContactList">
         <ac-contact-list
           [contacts]="contacts"
-          (selectContact)="selectContact($event)"
-          (editContact)="editContact($event)"
-          (removeContact)="removeContact($event)"
+          (selectContactFromList)="selectContactFromList($event)"
+          (selectContactForEditing)="selectContactForEditing($event)"
+          (deleteContact)="deleteContact($event)"
         ></ac-contact-list>
         <button
           class="w-full !mt-4"
           mat-raised-button
           color="primary"
-          (click)="showContactList = false"
+          (click)="newContact()"
         >
           Nuovo contatto
         </button>
@@ -32,8 +35,8 @@ import { Component, OnInit } from '@angular/core';
           Indietro
         </button>
         <ac-contact-form
-          [editSelectedContact]="editSelectedContact"
-          (saveNewContact)="saveNewContact($event)"
+          [selectedContact]="selectedContact"
+          (contactSubmitHandler)="contactSubmitHandler($event)"
         ></ac-contact-form>
       </ng-container>
     </mat-dialog-content>
@@ -43,51 +46,78 @@ import { Component, OnInit } from '@angular/core';
 export class ContactsComponent implements OnInit {
 
   showContactList: boolean = true;
+  isNewContact: boolean | null = null;
 
-  editSelectedContact: Contact[] = [];
+  contacts: Contact[] = [];
+  selectedContact: Contact[] = [];
+  selectedContactId: string | null = null;
+  contactFromList: Contact[] = [];
 
-  contacts: Contact[] = [
-    {
-      _id: 'id123',
-      name: 'Mario',
-      surname: 'Rossi',
-      iban: 'IT241241241412412412',
-    },
-    {
-      _id: 'id456',
-      name: 'Luigi',
-      surname: 'Bianchi',
-      iban: 'IT56756776576575756',
-    },
-  ];
+  constructor(private contactsService: ContactsService, private snackBar: MatSnackBar, public dialog: MatDialog) {}
 
-  constructor(public dialog: MatDialog) {}
-
-  ngOnInit(): void {}
-
-  selectContact(selectedContact: Contact) {
-    console.log('selectContact', selectedContact);
+  ngOnInit(): void {
+    this.contactsService.getContacts().subscribe(res => {
+      this.contacts = res;
+      console.log("contacts", this.contacts);
+    });
   }
 
-  editContact(selectedContact: Contact) {
+  selectContactFromList(contact: any) {
+    this.dialog.closeAll();
+    this.contactFromList = contact;
+    console.log("CAZZZZZZZZZZZZZZZOOOOOOOOOOOOOOO", contact)
+  }
+
+  addContact(contactData: any) {
+    this.contactsService.addContact(contactData).subscribe((res: any) => {
+      this.contacts = [...this.contacts, res];
+      this.snackBar.open('Contatto aggiunto', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+    });
+  }
+
+  newContact() {
     this.showContactList = false;
-    this.editSelectedContact = [];
-    return (this.editSelectedContact = [
-      ...this.editSelectedContact,
-      selectedContact,
-    ]);
+    this.isNewContact = true;
   }
 
-  removeContact(selectedContactId: any) {
-    this.contacts = this.contacts.filter(
-      (contact) => contact._id != selectedContactId
-    );
+  selectContactForEditing(contactForm: any) {
+    this.showContactList = false;
+    this.isNewContact = false;
+    this.selectedContact = contactForm;
+    this.selectedContactId = contactForm._id;
+    console.log("this.selectedContact", this.selectedContact);
   }
 
-  saveNewContact(form: NgForm) {
+  editContact(selectedContact: any, selectedContactId: any) {
+    this.contactsService.updateContact(selectedContactId, selectedContact).subscribe((res: any) => {
+      const index = this.contacts.findIndex(contactIndex => contactIndex._id === selectedContactId);
+      this.contacts[index] = res;
+      this.selectedContact = [];
+      this.snackBar.open('Contatto modificato', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+
+    });
+  }
+
+  deleteContact(contactId: string) {
+    this.contactsService.deleteContact(contactId).subscribe((res: any) => {
+      if (res) {
+        this.contacts = this.contacts.filter((contact) => contact._id != contactId);
+        this.snackBar.open('Contatto cancellato', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+      } else {
+        this.snackBar.open('Impossibile cancellare il contatto', 'ERROR', { duration: 2500, panelClass: ['text-red-400'] });
+      }
+    });
+  }
+
+  contactSubmitHandler(form: any) {
     if (!form.invalid) {
-      this.contacts = [...this.contacts, form.value];
-      console.log(form.value);
+      if(this.isNewContact) {
+        this.addContact(form.value);
+      } else {
+        this.selectedContact = form.value;
+        this.editContact(this.selectedContact, this.selectedContactId);
+      }
+      this.showContactList = true;
       form.reset();
     }
   }

@@ -12,7 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
         <input
           type="text"
           matInput
-          [ngModel]="editSelectedContact[0].name"
+          [ngModel]="selectedContact?.name"
           name="name"
           placeholder="Inserisci il tuo nome"
           #nameRef="ngModel"
@@ -32,7 +32,7 @@ import { MatDialog } from '@angular/material/dialog';
         <input
           type="text"
           matInput
-          [ngModel]="editSelectedContact[0].surname"
+          [ngModel]="selectedContact?.surname"
           name="surname"
           placeholder="Inserisci il tuo cognome"
           #surnameRef="ngModel"
@@ -52,7 +52,7 @@ import { MatDialog } from '@angular/material/dialog';
           <input
             type="text"
             matInput
-            [ngModel]="editSelectedContact[0].iban"
+            [ngModel]="selectedContact?.iban"
             name="iban"
             placeholder="Inserisci l'IBAN del destinatario"
             #ibanRef="ngModel"
@@ -75,8 +75,8 @@ import { MatDialog } from '@angular/material/dialog';
           Il codice IBAN è obbligatorio
           </mat-error>
         </mat-form-field>
-      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid" (click)="saveNewContact.emit(f)">
-        Salva
+      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid" (click)="contactSubmitHandler.emit(f)">
+        {{ selectedContact.iban ? 'Modifica' : 'Salva' }}
       </button>
     </form>
   `,
@@ -87,11 +87,9 @@ export class ContactFormComponent implements OnInit {
 
   constructor(public dialog: MatDialog) { }
 
-  ngOnInit(): void {
-    console.log("selectedContact", this.editSelectedContact);
-  }
+  ngOnInit(): void {}
 
-  @Input() editSelectedContact: Contact[] = [];
-  @Output() saveNewContact = new EventEmitter<NgForm>();
+  @Input() selectedContact: any;
+  @Output() contactSubmitHandler = new EventEmitter<NgForm>();
 
 }

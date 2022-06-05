@@ -39,28 +39,29 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
         </div>
         <div>
           <mat-icon
-            class="mr-4"
+            class="cursor-pointer mr-4"
             matSuffix
             matTooltip="Seleziona"
             matTooltipPosition="below"
-            (click)="selectContact.emit(contact)"
+            (click)="selectContactFromList.emit(contact)"
           >
             done
           </mat-icon>
           <mat-icon
-            class="mr-4"
+            class="cursor-pointer mr-4"
             matSuffix
             matTooltip="Modifica"
             matTooltipPosition="below"
-            (click)="editContact.emit(contact)"
+            (click)="selectContactForEditing.emit(contact)"
           >
             edit
           </mat-icon>
           <mat-icon
+            class="cursor-pointer"
             matSuffix
             matTooltip="Rimuovi"
             matTooltipPosition="below"
-            (click)="removeContact.emit(contact._id)"
+            (click)="deleteContact.emit(contact._id)"
           >
             delete
           </mat-icon>
@@ -80,7 +81,7 @@ export class ContactListComponent implements OnInit {
   }
 
   @Input() contacts: Contact[] = [];
-  @Output() selectContact = new EventEmitter<any>();
-  @Output() editContact = new EventEmitter<any>();
-  @Output() removeContact = new EventEmitter<any>();
+  @Output() selectContactFromList = new EventEmitter<any>();
+  @Output() selectContactForEditing = new EventEmitter<any>();
+  @Output() deleteContact = new EventEmitter<any>();
 }

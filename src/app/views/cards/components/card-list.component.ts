@@ -16,6 +16,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
         </div>
         <div>
           <mat-icon
+            class="cursor-pointer"
             matSuffix
             matTooltip="Vedi movimenti"
             matTooltipPosition="below"
@@ -24,6 +25,7 @@ import { Component, OnInit, EventEmitter, Input, Output } from '@angular/core';
             receipt_long
           </mat-icon>
           <mat-icon
+            class="cursor-pointer"
             matSuffix
             matTooltip="Rimuovi"
             matTooltipPosition="below"

@@ -1,4 +1,8 @@
-import { Contact } from 'src/app/models/contact';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { TransferService } from './../../api/transfer.service';
+import { CardsService } from './../../api/cards.service';
+import { Card } from 'src/app/models/card';
+import { ContactsService } from './../../api/contacts.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactsComponent } from './components/contacts.component';
@@ -83,38 +87,33 @@ import { ContactsComponent } from './components/contacts.component';
             type="number"
             matInput
             ngModel
-            name="cardCode"
+            name="amount"
             placeholder="Inserisci l'importo da trasferire"
-            #cardCodeRef="ngModel"
+            #amountRef="ngModel"
             required
             pattern="^[0-9]*$"
-            maxlength="9"
           />
           <mat-icon matPrefix>euro</mat-icon>
-          <mat-error *ngIf="cardCodeRef.errors?.['minlength']">
-          L'importo può avere lunghezza massima di
-          {{cardCodeRef.errors?.['minlength'].requiredLength}} cifre
-        </mat-error>
-          <mat-error *ngIf="cardCodeRef.errors?.['pattern']">
+          <mat-error *ngIf="amountRef.errors?.['pattern']">
             L'importo deve essere composto da soli numeri
           </mat-error>
-          <mat-error *ngIf="cardCodeRef.errors?.['required']">
-            Il numero carta è obbligatorio
+          <mat-error *ngIf="amountRef.errors?.['required']">
+          L'importo è obbligatorio
           </mat-error>
         </mat-form-field>
       <mat-form-field class="w-full" appearance="fill">
         <mat-label>Seleziona una carta</mat-label>
         <mat-icon matPrefix>credit_card</mat-icon>
         <mat-select name="type" ngModel #contactSelectRef="ngModel" required>
-          <mat-option *ngFor="let contact of contacts" [value]="contact._id">
-            {{contact.iban}}
+          <mat-option *ngFor="let card of cards" [value]="card._id">
+            {{card. number}}
           </mat-option>
         </mat-select>
         <mat-error *ngIf="contactSelectRef.errors?.['required']">
-            Il tipo di carta è obbligatorio
+            Devi selezionare una carta
         </mat-error>
       </mat-form-field>
-      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid">
+      <button type="button" class="w-full !mt-4" mat-raised-button color="primary" [disabled]="!f.valid" (click)="transferSubmitHandler(f)">
         Trasferisci denaro
       </button>
     </form>
@@ -125,30 +124,36 @@ import { ContactsComponent } from './components/contacts.component';
 })
 export class TransferComponent implements OnInit {
 
-  contacts: Contact[] = [
-    {
-      _id: 'id123',
-      name: 'Mario',
-      surname: 'Rossi',
-      iban: 'IT241241241412412412',
-    },
-    {
-      _id: 'id456',
-      name: 'Luigi',
-      surname: 'Bianchi',
-      iban: 'IT56756776576575756',
-    },
-  ]
+  cards: Card[] = [];
 
-  constructor(public dialog: MatDialog) { }
+  constructor(private cardsService: CardsService, private transferService: TransferService, public dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnInit(): void {
+    this.cardsService.getCards().subscribe(res => {
+      this.cards = res;
+      console.log("cards", this.cards);
+    });
   }
 
   openContactsDialog() {
     this.dialog.open(ContactsComponent, {
       width: '500px',
     });
+  }
+
+  transfer(transferForm: any) {
+    console.log("transferForm", transferForm);
+    this.transferService.postTransfer(transferForm).subscribe((res: any) => {
+      console.log(res);
+      this.snackBar.open('Trasferimento avvenuto', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
+    });
+  }
+
+  transferSubmitHandler(form: any) {
+    if (!form.invalid) {
+      this.transfer(form.value);
+      form.reset();
+    }
   }
 
 }

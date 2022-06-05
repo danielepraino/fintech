@@ -61,20 +61,20 @@ export class MovementsComponent implements OnInit {
     });
   }
 
-  selectedCardMovements(cardId: any) {
-    this.router.navigateByUrl(`dashboard/movements/${cardId.value}`);
-    this.movements = [];
-    this.movementsIncrement = 5;
-    this.selectedCard = this.cards.filter((card) => card._id == cardId.value);
-    this.cardMovements(this.selectedCard, this.movementsLimit, this.movementsOffset);
-  }
-
   cardMovements(selectedCard: any, limit: number, offset: number) {
     this.cardsService
       .getCardMovements(selectedCard[0]._id, limit, offset)
       .subscribe((res: any) => {
         this.movements = res;
       });
+  }
+
+  selectedCardMovements(cardId: any) {
+    this.router.navigateByUrl(`dashboard/movements/${cardId.value}`);
+    this.movements = [];
+    this.movementsIncrement = 5;
+    this.selectedCard = this.cards.filter((card) => card._id == cardId.value);
+    this.cardMovements(this.selectedCard, this.movementsLimit, this.movementsOffset);
   }
 
   loadMoreMovements(selectedCard: any, limit: number, offset: number, increment: number) {

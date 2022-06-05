@@ -28,5 +28,4 @@ export class CardsService {
     return this.http.get<Movement[]>(`${environment.apiUrl}/cards/${cardId}/movements`, { params: { limit, offset } });
   }
 
-
 }
