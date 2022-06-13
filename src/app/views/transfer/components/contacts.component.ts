@@ -65,7 +65,6 @@ export class ContactsComponent implements OnInit {
   selectContactFromList(contact: any) {
     this.dialog.closeAll();
     this.contactFromList = contact;
-    console.log("CAZZZZZZZZZZZZZZZOOOOOOOOOOOOOOO", contact)
   }
 
   addContact(contactData: any) {

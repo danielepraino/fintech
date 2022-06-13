@@ -67,7 +67,6 @@ export class SignInComponent implements OnInit {
 
   signinHandler(form: NgForm) {
     if (!form.invalid) {
-      console.log(form.value);
       form.reset();
       this.router.navigateByUrl('dashboard');
     }

@@ -131,7 +131,6 @@ export class TransferComponent implements OnInit {
   ngOnInit(): void {
     this.cardsService.getCards().subscribe(res => {
       this.cards = res;
-      console.log("cards", this.cards);
     });
   }
 
@@ -142,9 +141,7 @@ export class TransferComponent implements OnInit {
   }
 
   transfer(transferForm: any) {
-    console.log("transferForm", transferForm);
     this.transferService.postTransfer(transferForm).subscribe((res: any) => {
-      console.log(res);
       this.snackBar.open('Trasferimento avvenuto', 'SUCCESS', { duration: 2500, panelClass: ['text-green-400'] });
     });
   }
