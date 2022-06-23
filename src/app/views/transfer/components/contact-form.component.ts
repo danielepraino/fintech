@@ -1,4 +1,3 @@
-import { Contact } from 'src/app/models/contact';
 import { NgForm } from '@angular/forms';
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';

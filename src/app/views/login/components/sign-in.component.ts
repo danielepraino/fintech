@@ -35,21 +35,15 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
             name="password"
             placeholder="Inserisci la tua password"
             #passwordRef="ngModel"
-            minlength="8"
-            maxlength="20"
             required
           >
-          <mat-hint align="end">{{passwordRef.value?.length}} / 20</mat-hint>
           <mat-icon matPrefix>lock</mat-icon>
           <mat-icon matSuffix (click)="showPasswordSignin = !showPasswordSignin">{{ showPasswordSignin ? "visibility" : "visibility_off" }}</mat-icon>
-          <mat-error *ngIf="passwordRef.errors?.['minlength']">
-                La password deve essere di minimo {{passwordRef.errors?.['minlength'].requiredLength}} caratteri
-          </mat-error>
           <mat-error *ngIf="passwordRef.errors?.['required']">
                 La password è obbligatoria
           </mat-error>
         </mat-form-field>
-        <button class="w-full !my-4" type="button" mat-raised-button color="primary" (click)="signinHandler(f)">Accedi</button>
+        <button class="w-full !my-4" type="button" mat-raised-button color="primary" (click)="signinHandler(f)" (keyup.enter)="signinHandler(f)">Accedi</button>
         <a class="underline cursor-pointer" (click)="show.emit(false)" routerLink="../register">Crea un nuovo account</a>
     </form>
   `,

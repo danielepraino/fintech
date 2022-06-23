@@ -1,9 +1,7 @@
-import { ContactFormComponent } from './contact-form.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ContactsService } from './../../../api/contacts.service';
 import { Contact } from 'src/app/models/contact';
 import { MatDialog } from '@angular/material/dialog';
-import { NgForm } from '@angular/forms';
 import { Component, OnInit } from '@angular/core';
 
 @Component({
@@ -58,7 +56,6 @@ export class ContactsComponent implements OnInit {
   ngOnInit(): void {
     this.contactsService.getContacts().subscribe(res => {
       this.contacts = res;
-      console.log("contacts", this.contacts);
     });
   }
 
@@ -84,7 +81,6 @@ export class ContactsComponent implements OnInit {
     this.isNewContact = false;
     this.selectedContact = contactForm;
     this.selectedContactId = contactForm._id;
-    console.log("this.selectedContact", this.selectedContact);
   }
 
   editContact(selectedContact: any, selectedContactId: any) {

@@ -2,7 +2,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { TransferService } from './../../api/transfer.service';
 import { CardsService } from './../../api/cards.service';
 import { Card } from 'src/app/models/card';
-import { ContactsService } from './../../api/contacts.service';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ContactsComponent } from './components/contacts.component';
